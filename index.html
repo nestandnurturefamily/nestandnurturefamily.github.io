@@ -379,12 +379,17 @@ function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.togg
 document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>show(b.dataset.view)));
 function empty(msg,icon='🌿'){return `<div class="empty"><span>${icon}</span>${msg}</div>`}
 function render(){
-$('#eventCount').textContent=events.length; $('#totalTasks').textContent = tasks.length;
+$('#eventCount').textContent = events.length;
+$('#taskCount').textContent = tasks.filter(t => !t.done).length;
+$('#childCount').textContent = children.length;
+
+$('#totalTasks').textContent = tasks.length;
 $('#completedTasks').textContent = tasks.filter(t => t.done).length;
-$('#remainingTasks').textContent = tasks.filter(t => !t.done).length; const now = new Date();
+$('#remainingTasks').textContent = tasks.filter(t => !t.done).length;
+
+const now = new Date();
 const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
   .toISOString().slice(0, 10);
-
 const upcoming = events
   .filter(e => e.date && e.date >= today)
   .sort((a, b) => a.date.localeCompare(b.date))
