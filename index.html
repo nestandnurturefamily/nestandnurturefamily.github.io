@@ -148,51 +148,53 @@ footer{text-align:center;color:#a99c94;font-size:10px;padding:25px}
 <div class="app" style="display:none">
 <header><div class="brand"><div class="logo">🌷</div><div><h1>Nest & Nurture</h1><div class="tag">YOUR FAMILY, BEAUTIFULLY ORGANIZED</div></div></div><div class="date-pill" id="today"></div></header>
 <main>
+
 <section class="view active" id="dashboard">
-<div class="welcome"><div class="eyebrow">A little more organized</div><h2>Make room for what matters.</h2><p class="sub">Your family life, all in one gentle place.</p></div>
-<div class="quick">
-<button onclick="show('calendar')"><span class="emoji">🗓️</span><b>Plan your week</b><small>Appointments & events</small></button>
-<button onclick="show('meals')"><span class="emoji">🍓</span><b>Plan your meals</b><small>Keep dinner simple</small></button>
-<button onclick="show('budget')"><span class="emoji">🤍</span><b>Check your budget</b><small>Know what's coming</small></button>
-</div>
-<div class="section-head">
-  <h3>Coming up</h3>
-  <button class="link" onclick="show('calendar')">Open calendar →</button>
-</div>
-<div class="panel" id="upcomingEvents">
-  <div class="empty">Your upcoming events will appear here. 🗓️</div>
-</div>
-<div class="section-head">
-  <h3>Coming up</h3>
-  <button class="link" onclick="show('calendar')">Open calendar →</button>
-</div>
-<div class="panel" id="upcomingEvents">
-  <div class="empty">Your upcoming events will appear here. 🗓️</div>
-</div>
-<div class="section-head"><h3> <div class="section-head">
-  <h3>Task overview</h3>
-  <button class="link" onclick="show('checklists')">View all tasks →</button>
-</div>
-<div class="cards">
-  <div class="card">
-    <h4>Total tasks</h4>
-    <div class="big-number" id="totalTasks">0</div>
+  <div class="welcome">
+    <div class="eyebrow">A little more organized</div>
+    <h2>Make room for what matters.</h2>
+    <p class="sub">Your family life, all in one gentle place.</p>
   </div>
-  <div class="card">
-    <h4>Completed</h4>
-    <div class="big-number" id="completedTasks">0</div>
+
+  <div class="quick">
+    <button onclick="show('calendar')"><span class="emoji">🗓️</span><b>Plan your week</b><small>Appointments & events</small></button>
+    <button onclick="show('meals')"><span class="emoji">🍓</span><b>Plan your meals</b><small>Keep dinner simple</small></button>
+    <button onclick="show('budget')"><span class="emoji">🤍</span><b>Check your budget</b><small>Know what's coming</small></button>
   </div>
-  <div class="card">
-    <h4>Still to do</h4>
-    <div class="big-number" id="remainingTasks">0</div>
+
+  <div class="section-head">
+    <h3>Coming up</h3>
+    <button class="link" onclick="show('calendar')">Open calendar →</button>
   </div>
-</div>Your family snapshot</h3><button class="link" onclick="show('checklists')">View tasks →</button></div>
-<div class="cards">
-<div class="card"><h4>🗓️ Upcoming events</h4><div class="big-number" id="eventCount">0</div><div class="muted">Events saved in your calendar</div></div>
-<div class="card"><h4>☑️ To-do list</h4><div class="big-number" id="taskCount">0</div><div class="muted">Tasks still to complete</div></div>
-<div class="card"><h4>💗 Family profiles</h4><div class="big-number" id="childCount">0</div><div class="muted">Children added to your tracker</div></div>
-</div>
-<div class="section-head"><h3>A gentle reminder</h3></div><div class="panel"><div style="font-family:Georgia,serif;font-size:19px">“You don't have to do it all today.”</div><p class="muted">Small steps count. Take a breath and begin where you are.</p></div>
+  <div class="panel" id="upcomingEvents">
+    <div class="empty">Your upcoming events will appear here. 🗓️</div>
+  </div>
+
+  <div class="section-head">
+    <h3>Task overview</h3>
+    <button class="link" onclick="show('checklists')">View all tasks →</button>
+  </div>
+  <div class="cards">
+    <div class="card"><h4>Total tasks</h4><div class="big-number" id="totalTasks">0</div></div>
+    <div class="card"><h4>Completed</h4><div class="big-number" id="completedTasks">0</div></div>
+    <div class="card"><h4>Still to do</h4><div class="big-number" id="remainingTasks">0</div></div>
+  </div>
+
+  <div class="section-head">
+    <h3>Your family snapshot</h3>
+    <button class="link" onclick="show('checklists')">View tasks →</button>
+  </div>
+  <div class="cards">
+    <div class="card"><h4>🗓️ Upcoming events</h4><div class="big-number" id="eventCount">0</div><div class="muted">Events saved in your calendar</div></div>
+    <div class="card"><h4>☑️ To-do list</h4><div class="big-number" id="taskCount">0</div><div class="muted">Tasks still to complete</div></div>
+    <div class="card"><h4>💗 Family profiles</h4><div class="big-number" id="childCount">0</div><div class="muted">Children added to your tracker</div></div>
+  </div>
+
+  <div class="section-head"><h3>A gentle reminder</h3></div>
+  <div class="panel">
+    <div style="font-family:Georgia,serif;font-size:19px">“You don't have to do it all today.”</div>
+    <p class="muted">Small steps count. Take a breath and begin where you are.</p>
+  </div>
 </section>
 
 <section class="view" id="calendar">
