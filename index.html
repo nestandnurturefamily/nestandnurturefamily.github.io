@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f7f0eb">
+<meta name="description" content="A calmer way to organize family life.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<title>Nest & Nurture</title>
+<style>
+:root{--ink:#403832;--muted:#82766e;--rose:#b77d78;--rose2:#ead5d0;--cream:#faf6f2;--sage:#849487;--line:#eee5df;--white:#fff;--shadow:0 8px 28px #5d45300d}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,textarea,select{font:inherit}button{cursor:pointer}.app{max-width:1120px;margin:auto;min-height:100vh;padding-bottom:86px}
+header{padding:25px 22px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:44px;height:44px;border-radius:15px;background:var(--rose2);display:grid;place-items:center;font-size:23px}
+h1{font-family:Georgia,serif;font-weight:500;font-size:25px;margin:0;letter-spacing:-.5px}.tag{font-size:10px;letter-spacing:1.7px;color:var(--muted);margin-top:3px}
+.date-pill{font-size:12px;color:var(--muted);background:#fff;border:1px solid var(--line);padding:9px 12px;border-radius:99px}
+main{padding:0 18px}.welcome{padding:18px 5px 20px}.eyebrow{color:var(--rose);font-size:11px;text-transform:uppercase;letter-spacing:1.7px;font-weight:700}
+h2{font-family:Georgia,serif;font-size:29px;font-weight:500;margin:6px 0}.sub{color:var(--muted);font-size:14px;line-height:1.5;margin:5px 0}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 22px}
+.quick button{border:1px solid var(--line);background:#fff;border-radius:16px;padding:14px 8px;color:var(--ink);box-shadow:var(--shadow);text-align:left}
+.quick .emoji{font-size:22px;display:block;margin-bottom:9px}.quick b{font-size:12px}.quick small{display:block;color:var(--muted);font-size:10px;margin-top:4px}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin:20px 2px 10px}.section-head h3{font-family:Georgia,serif;font-size:20px;font-weight:500;margin:0}
+.link{border:0;background:none;color:var(--rose);font-size:12px;font-weight:700}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:var(--shadow);min-width:0}
+.card h4{margin:0 0 7px;font-size:14px}.muted{color:var(--muted);font-size:12px;line-height:1.5}.big-number{font-family:Georgia,serif;font-size:25px;margin:7px 0}
+.progress{height:7px;background:#f1eae5;border-radius:99px;overflow:hidden;margin:10px 0}.progress span{display:block;height:100%;background:var(--sage);border-radius:99px}
+.item{display:flex;align-items:center;gap:9px;padding:10px 0;border-bottom:1px solid #f3eeea;font-size:13px}.item:last-child{border:0}.item input{accent-color:var(--sage)}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fffF;border-top:1px solid var(--line);backdrop-filter:blur(14px);display:flex;justify-content:center;z-index:5;padding:8px 5px calc(8px + env(safe-area-inset-bottom))}
+.nav-inner{width:min(100%,760px);display:grid;grid-template-columns:repeat(6,1fr);gap:2px}.nav-btn{border:0;background:none;color:#988b83;font-size:10px;padding:5px 1px;border-radius:12px}.nav-btn span{display:block;font-size:19px;margin-bottom:3px}.nav-btn.active{color:var(--rose);background:#f8efed;font-weight:700}
+.view{display:none}.view.active{display:block}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;margin:12px 0;box-shadow:var(--shadow)}
+.form{display:grid;gap:10px;margin-top:12px}.form input,.form textarea,.form select{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;background:#fff;color:var(--ink);outline-color:var(--rose)}.form textarea{min-height:75px;resize:vertical}
+.btn{border:0;border-radius:12px;background:var(--rose);color:white;padding:12px 15px;font-weight:700;font-size:13px}.btn.secondary{background:#f4e9e6;color:#805e59}.btn.danger{background:#f7e7e5;color:#9b514a}.row{display:flex;gap:8px;align-items:center}.row>*{flex:1;min-width:0}
+.entry{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;border-bottom:1px solid #f1ebe7;padding:12px 0}.entry:last-child{border:0}.entry strong{font-size:13px}.entry small{display:block;color:var(--muted);margin-top:4px;font-size:11px}.amount{font-weight:700;font-size:13px;white-space:nowrap}
+.empty{padding:22px;text-align:center;color:var(--muted);font-size:13px}.empty span{display:block;font-size:27px;margin-bottom:8px}
+footer{text-align:center;color:#a99c94;font-size:10px;padding:25px}
+@media(min-width:700px){main{padding:0 28px}.quick{grid-template-columns:repeat(3,1fr)}.cards{grid-template-columns:repeat(3,minmax(0,1fr))}.welcome{padding-top:26px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand"><div class="logo">🌷</div><div><h1>Nest & Nurture</h1><div class="tag">YOUR FAMILY, BEAUTIFULLY ORGANIZED</div></div></div><div class="date-pill" id="today"></div></header>
+<main>
+<section class="view active" id="dashboard">
+<div class="welcome"><div class="eyebrow">A little more organized</div><h2>Make room for what matters.</h2><p class="sub">Your family life, all in one gentle place.</p></div>
+<div class="quick">
+<button onclick="show('calendar')"><span class="emoji">🗓️</span><b>Plan your week</b><small>Appointments & events</small></button>
+<button onclick="show('meals')"><span class="emoji">🍓</span><b>Plan your meals</b><small>Keep dinner simple</small></button>
+<button onclick="show('budget')"><span class="emoji">🤍</span><b>Check your budget</b><small>Know what's coming</small></button>
+</div>
+<div class="section-head"><h3>Your family snapshot</h3><button class="link" onclick="show('checklists')">View tasks →</button></div>
+<div class="cards">
+<div class="card"><h4>🗓️ Upcoming events</h4><div class="big-number" id="eventCount">0</div><div class="muted">Events saved in your calendar</div></div>
+<div class="card"><h4>☑️ To-do list</h4><div class="big-number" id="taskCount">0</div><div class="muted">Tasks still to complete</div></div>
+<div class="card"><h4>💗 Family profiles</h4><div class="big-number" id="childCount">0</div><div class="muted">Children added to your tracker</div></div>
+</div>
+<div class="section-head"><h3>A gentle reminder</h3></div><div class="panel"><div style="font-family:Georgia,serif;font-size:19px">“You don't have to do it all today.”</div><p class="muted">Small steps count. Take a breath and begin where you are.</p></div>
+</section>
+
+<section class="view" id="calendar">
+<div class="welcome"><div class="eyebrow">Stay in the know</div><h2>Family calendar</h2><p class="sub">Keep appointments, special days, and plans together.</p></div>
+<div class="panel"><h3 style="font-family:Georgia,serif;font-weight:500;margin:0">Add an event</h3><form class="form" id="eventForm"><input name="title" placeholder="Event name" required><div class="row"><input name="date" type="date" required><input name="time" type="time"></div><input name="person" placeholder="Who is it for? (optional)"><button class="btn">Save event</button></form></div>
+<div class="panel"><h3 style="font-family:Georgia,serif;font-weight:500;margin:0">Your events</h3><div id="eventsList"></div></div>
+</section>
+
+<section class="view" id="baby">
+<div class="welcome"><div class="eyebrow">Every little milestone</div><h2>Baby & child tracker</h2><p class="sub">Keep names, birthdays, and special milestones in one place.</p></div>
+<div class="panel"><h3 style="font-family:Georgia,serif;font-weight:500;margin:0">Add a child</h3><form class="form" id="childForm"><input name="name" placeholder="Child's name" required><div class="row"><input name="birthday" type="date"><select name="type"><option>Child</option><option>Baby</option></select></div><button class="btn">Add profile</button></form></div>
+<div class="panel"><h3 style="font-family:Georgia,serif;font-weight:500;margin:0">Family profiles</h3><div id="childrenList"></div></div>
+<div class="panel"><h3 style="font-family:Georgia,serif;font-weight:500;margin:0">Add a milestone</h3><form class="form" id="milestoneForm"><select name="child" id="milestoneChild"><option value="">Choose a child</option></select><input name="title" placeholder="Milestone or memory" required><input name="date" type="date"><textarea name="notes" placeholder="Notes (optional)"></textarea><button class="btn">Save milestone</button></form><div id="milestonesList"></div></div>
+<p class="muted">This is a family organizer, not a medical record or developmental assessment tool.</p>
+</section>
+
+<section class="view" id="meals">
+<div class="welcome"><div class="eyebrow">One less thing to think about</div><h2>Meal planner</h2><p class="sub">Plan simple meals and build your grocery list.</p></div>
+<div class="panel"><h3 style="font-family:Georgia,serif;font-weight:500;margin:0">Add a meal</h3><form class="form" id="mealForm"><div class="row"><input name="day" placeholder="Day (e.g. Monday)" required><select name="type"><option>Dinner</option><option>Breakfast</option><option>Lunch</option><option>Snack</option></select></div><input name="meal" placeholder="What are you making?" required><button class="btn">Save meal</button></form><div id="mealsList"></div></div>
+<div class="panel"><h3 style="font-family:Georgia,serif;font-weight:500;margin:0">Grocery list</h3><form class="form" id="groceryForm"><div class="row"><input name="item" placeholder="Add an item" required><button class="btn">Add</button></div></form><div id="groceriesList"></div></div>
+</section>
+
+<section class="view" id="budget">
+<div class="welcome"><div class="eyebrow">Feel more in control</div><h2>Household budget</h2><p class="sub">A simple place to track income, bills, and spending.</p></div>
+<div class="cards"><div class="card"><h4>Income</h4><div class="big-number" id="incomeTotal">$0.00</div></div><div class="card"><h4>Expenses</h4><div class="big-number" id="expenseTotal">$0.00</div></div><div class="card"><h4>Remaining</h4><div class="big-number" id="remainingTotal">$0.00</div></div></div>
+<div class="panel"><h3 style="font-family:Georgia,serif;font-weight:500;margin:0">Add a transaction</h3><form class="form" id="budgetForm"><input name="description" placeholder="Description (e.g. groceries)" required><div class="row"><input name="amount" type="number" min="0.01" step="0.01" placeholder="Amount" required><select name="type"><option value="expense">Expense</option><option value="income">Income</option></select></div><input name="date" type="date"><button class="btn">Save transaction</button></form></div>
+<div class="panel"><h3 style="font-family:Georgia,serif;font-weight:500;margin:0">Transactions</h3><div id="transactionsList"></div></div>
+<p class="muted">Your entries are stored locally on this device. This is not a bank account or financial advice.</p>
+</section>
+
+<section class="view" id="checklists">
+<div class="welcome"><div class="eyebrow">Little things add up</div><h2>Checklists & resources</h2><p class="sub">Break big days into smaller, manageable steps.</p></div>
+<div class="panel"><h3 style="font-family:Georgia,serif;font-weight:500;margin:0">Your to-do list</h3><form class="form" id="taskForm"><div class="row"><input name="task" placeholder="What needs doing?" required><button class="btn">Add</button></div></form><div id="tasksList"></div></div>
+<div class="panel"><h3 style="font-family:Georgia,serif;font-weight:500;margin:0">Starter checklists</h3><p class="muted">Tap a checklist to add its tasks to your list.</p><div class="item"><div style="flex:1"><strong>🍼 New baby essentials</strong><small>Diapers, wipes, safe sleep space, feeding supplies</small></div><button class="btn secondary" onclick="addStarter('baby')">Add</button></div><div class="item"><div style="flex:1"><strong>🏡 Weekly home reset</strong><small>Laundry, meal plan, groceries, tidy surfaces</small></div><button class="btn secondary" onclick="addStarter('home')">Add</button></div><div class="item"><div style="flex:1"><strong>🎒 School week prep</strong><small>Backpacks, outfits, calendar, lunches</small></div><button class="btn secondary" onclick="addStarter('school')">Add</button></div></div>
+<div class="panel"><h3 style="font-family:Georgia,serif;font-weight:500;margin:0">Your notes</h3><textarea id="notes" style="width:100%;min-height:110px;border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:12px" placeholder="Save a thought, reminder, or idea..."></textarea><button class="btn secondary" style="margin-top:8px" onclick="saveNotes()">Save notes</button><span class="muted" id="noteStatus" style="margin-left:8px"></span></div>
+</section>
+</main>
+<footer>Made with care · Nest & Nurture</footer>
+</div>
+<nav><div class="nav-inner">
+<button class="nav-btn active" data-view="dashboard"><span>⌂</span>Home</button>
+<button class="nav-btn" data-view="calendar"><span>🗓</span>Calendar</button>
+<button class="nav-btn" data-view="baby"><span>♡</span>Children</button>
+<button class="nav-btn" data-view="meals"><span>🍓</span>Meals</button>
+<button class="nav-btn" data-view="budget"><span>＄</span>Budget</button>
+<button class="nav-btn" data-view="checklists"><span>☑</span>Lists</button>
+</div></nav>
+<script>
+const $=s=>document.querySelector(s);
+const load=(k,d=[])=>{try{return JSON.parse(localStorage.getItem('nn_'+k))??d}catch{return d}};
+const save=(k,v)=>localStorage.setItem('nn_'+k,JSON.stringify(v));
+let events=load('events'),children=load('children'),milestones=load('milestones'),meals=load('meals'),groceries=load('groceries'),transactions=load('transactions'),tasks=load('tasks'),notes=load('notes','');
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(Number(n)||0);
+$('#today').textContent=new Date().toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});
+function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));render();window.scrollTo({top:0,behavior:'smooth'})}
+document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>show(b.dataset.view)));
+function empty(msg,icon='🌿'){return `<div class="empty"><span>${icon}</span>${msg}</div>`}
+function render(){
+$('#eventCount').textContent=events.length;$('#taskCount').textContent=tasks.filter(t=>!t.done).length;$('#childCount').textContent=children.length;
+$('#eventsList').innerHTML=events.length?events.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')).map((e,i)=>`<div class="entry"><div><strong>${esc(e.title)}</strong><small>${esc(e.date)} ${esc(e.time||'')} ${e.person?'· '+esc(e.person):''}</small></div><button class="link" onclick="removeItem('events',${i})">Delete</button></div>`).join(''):empty('Your calendar is ready for its first event.','🗓️');
+$('#childrenList').innerHTML=children.length?children.map((c,i)=>`<div class="entry"><div><strong>${esc(c.name)}</strong><small>${esc(c.type)} ${c.birthday?'· Birthday: '+esc(c.birthday):''}</small></div><button class="link" onclick="removeItem('children',${i})">Delete</button></div>`).join(''):empty('Add your children to begin.','♡');
+$('#milestoneChild').innerHTML='<option value="">Choose a child</option>'+children.map(c=>`<option>${esc(c.name)}</option>`).join('');
+$('#milestonesList').innerHTML=milestones.map(m=>`<div class="entry"><div><strong>${esc(m.title)}</strong><small>${esc(m.child)} · ${esc(m.date||'Date not set')} ${m.notes?'· '+esc(m.notes):''}</small></div></div>`).join('');
+$('#mealsList').innerHTML=meals.length?meals.map((m,i)=>`<div class="entry"><div><strong>${esc(m.day)} · ${esc(m.type)}</strong><small>${esc(m.meal)}</small></div><button class="link" onclick="removeItem('meals',${i})">Delete</button></div>`).join(''):empty('Your meal plan will show up here.','🍽️');
+$('#groceriesList').innerHTML=groceries.length?groceries.map((g,i)=>`<label class="item"><input type="checkbox" ${g.done?'checked':''} onchange="toggleGrocery(${i},this.checked)"><span style="${g.done?'text-decoration:line-through;color:#aaa':''}">${esc(g.item)}</span><button class="link" style="margin-left:auto" onclick="removeItem('groceries',${i})">×</button></label>`).join(''):empty('Add items as you think of them.','🛒');
+let inc=transactions.filter(t=>t.type==='income').reduce((s,t)=>s+Number(t.amount),0),exp=transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+Number(t.amount),0);
+$('#incomeTotal').textContent=money(inc);$('#expenseTotal').textContent=money(exp);$('#remainingTotal').textContent=money(inc-exp);
+$('#transactionsList').innerHTML=transactions.length?transactions.map((t,i)=>`<div class="entry"><div><strong>${esc(t.description)}</strong><small>${esc(t.date||'No date')} · ${t.type}</small></div><div class="amount" style="color:${t.type==='income'?'#66816d':'#9c6964'}">${t.type==='income'?'+':'−'}${money(t.amount)} <button class="link" onclick="removeItem('transactions',${i})">×</button></div></div>`).join(''):empty('Your transactions will appear here.','♡');
+$('#tasksList').innerHTML=tasks.length?tasks.map((t,i)=>`<label class="item"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i},this.checked)"><span style="flex:1;${t.done?'text-decoration:line-through;color:#aaa':''}">${esc(t.task)}</span><button class="link" onclick="removeItem('tasks',${i})">×</button></label>`).join(''):empty('Add your first task.','☑️');
+$('#notes').value=notes;
+}
+function removeItem(k,i){let a=({events,children,meals,groceries,transactions,tasks})[k];a.splice(i,1);save(k,a);({events,children,meals,groceries,transactions,tasks}[k]=a);render()}
+function toggleTask(i,v){tasks[i].done=v;save('tasks',tasks);render()}
+function toggleGrocery(i,v){groceries[i].done=v;save('groceries',groceries);render()}
+function formData(form){return Object.fromEntries(new FormData(form).entries())}
+function bind(id,fn){$(id).addEventListener('submit',e=>{e.preventDefault();fn(formData(e.target));e.target.reset();render()})}
+bind('#eventForm',d=>{events.push(d);save('events',events)});
+bind('#childForm',d=>{children.push(d);save('children',children)});
+bind('#milestoneForm',d=>{if(!d.child){alert('Please choose a child first.');return}milestones.push(d);save('milestones',milestones)});
+bind('#mealForm',d=>{meals.push(d);save('meals',meals)});
+bind('#groceryForm',d=>{groceries.push({...d,done:false});save('groceries',groceries)});
+bind('#budgetForm',d=>{transactions.push(d);save('transactions',transactions)});
+bind('#taskForm',d=>{tasks.push({...d,done:false});save('tasks',tasks)});
+function addStarter(kind){let sets={baby:['Prepare safe sleep space','Stock diapers and wipes','Organize feeding supplies','Wash baby clothes'],home:['Plan meals for the week','Check household supplies','Wash and fold laundry','Tidy one shared space'],school:['Check school calendar','Prepare backpacks','Plan lunches','Choose outfits']};tasks.push(...sets[kind].map(task=>({task,done:false})));save('tasks',tasks);render();show('checklists')}
+function saveNotes(){notes=$('#notes').value;save('notes',notes);$('#noteStatus').textContent='Saved';setTimeout(()=>$('#noteStatus').textContent='',1800)}
+if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
+render();
+</script>
+</body></html>

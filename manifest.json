@@ -1,0 +1,17 @@
+{
+  "name": "Nest & Nurture",
+  "short_name": "Nest & Nurture",
+  "description": "A calmer way to organize family life.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#faf6f2",
+  "theme_color": "#f7f0eb",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
