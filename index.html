@@ -162,6 +162,13 @@ footer{text-align:center;color:#a99c94;font-size:10px;padding:25px}
 <div class="panel" id="upcomingEvents">
   <div class="empty">Your upcoming events will appear here. 🗓️</div>
 </div>
+<div class="section-head">
+  <h3>Coming up</h3>
+  <button class="link" onclick="show('calendar')">Open calendar →</button>
+</div>
+<div class="panel" id="upcomingEvents">
+  <div class="empty">Your upcoming events will appear here. 🗓️</div>
+</div>
 <div class="section-head"><h3>Your family snapshot</h3><button class="link" onclick="show('checklists')">View tasks →</button></div>
 <div class="cards">
 <div class="card"><h4>🗓️ Upcoming events</h4><div class="big-number" id="eventCount">0</div><div class="muted">Events saved in your calendar</div></div>
@@ -355,7 +362,26 @@ function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.togg
 document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>show(b.dataset.view)));
 function empty(msg,icon='🌿'){return `<div class="empty"><span>${icon}</span>${msg}</div>`}
 function render(){
-$('#eventCount').textContent=events.length;$('#taskCount').textContent=tasks.filter(t=>!t.done).length;$('#childCount').textContent=children.length;
+$('#eventCount').textContent=events.length; const now = new Date();
+const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+  .toISOString().slice(0, 10);
+
+const upcoming = events
+  .filter(e => e.date && e.date >= today)
+  .sort((a, b) => a.date.localeCompare(b.date))
+  .slice(0, 5);
+
+$('#upcomingEvents').innerHTML = upcoming.length
+  ? upcoming.map(e => `
+      <div class="entry">
+        <div>
+          <strong>${esc(e.title)}</strong>
+          <small>${esc(e.date)} ${esc(e.time || '')}
+          ${e.person ? ' · ' + esc(e.person) : ''}</small>
+        </div>
+      </div>
+    `).join('')
+  : empty('Nothing scheduled yet. Enjoy the breathing room!','🌷');$('#taskCount').textContent=tasks.filter(t=>!t.done).length;$('#childCount').textContent=children.length;
   const now = new Date();
 const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
   .toISOString().slice(0, 10);
