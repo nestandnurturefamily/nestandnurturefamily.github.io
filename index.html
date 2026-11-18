@@ -517,6 +517,54 @@ async function logout() {
   location.reload();
 }
 
+async function deleteAccount() {
+  const confirmation = prompt(
+    'Permanently delete your account and all saved family data?\n\nType DELETE MY ACCOUNT to continue:'
+  );
+
+  if (confirmation !== 'DELETE MY ACCOUNT') {
+    if (confirmation !== null) {
+      alert('Confirmation did not match. Nothing was deleted.');
+    }
+    return;
+  }
+
+  const button = document.querySelector(
+    'button[onclick="deleteAccount()"]'
+  );
+
+  button.disabled = true;
+  button.textContent = 'Deleting account...';
+
+  try {
+    const { data, error } =
+      await supabaseClient.functions.invoke('delete-account', {
+        body: { confirmation: 'DELETE MY ACCOUNT' }
+      });
+
+    if (error) throw error;
+    if (!data?.success) {
+      throw new Error(data?.error || 'Account deletion failed.');
+    }
+
+    currentUserId = null;
+
+    ['events','children','milestones','meals',
+     'groceries','transactions','tasks','notes']
+      .forEach(key => localStorage.removeItem('nn_' + key));
+
+    await supabaseClient.auth.signOut();
+
+    alert('Your account and saved family data have been deleted.');
+    location.reload();
+
+  } catch (error) {
+    alert('Account deletion failed: ' + error.message);
+    button.disabled = false;
+    button.textContent = 'Delete My Account';
+  }
+}
+
 
 function removeMilestone(i){
   milestones.splice(i,1);
