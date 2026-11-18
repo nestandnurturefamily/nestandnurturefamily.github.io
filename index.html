@@ -205,99 +205,6 @@ document.getElementById('forgotPassword').addEventListener('click', async () => 
 });
 
 
-async function checkLogin() {
-  const { data: { session } } =
-    await supabaseClient.auth.getSession();
-
-  authScreen.style.display = session ? 'none' : 'block';
-  logoutButton.style.display = session ? 'block' : 'none';
-  document.querySelector('.app').style.display =
-    session ? 'block' : 'none';
-  document.querySelector('nav').style.display =
-    session ? 'flex' : 'none';
-
-  if (!session) {
-    currentUserId = null;
-    return;
-  }
-
-async function logout() {
-  const { error } = await supabaseClient.auth.signOut();
-
-  if (error) {
-    alert('Sign out failed: ' + error.message);
-    return;
-  }
-
-  currentUserId = null;
-
-  events = [];
-  children = [];
-  milestones = [];
-  meals = [];
-  groceries = [];
-  transactions = [];
-  tasks = [];
-  notes = '';
-
-  [
-    'events', 'children', 'milestones', 'meals',
-    'groceries', 'transactions', 'tasks', 'notes'
-  ].forEach(key => localStorage.removeItem('nn_' + key));
-
-  authScreen.style.display = 'block';
-  document.querySelector('.app').style.display = 'none';
-  document.querySelector('nav').style.display = 'none';
-}
-
-const logoutButton = document.createElement('button');
-logoutButton.textContent = 'Sign Out';
-logoutButton.type = 'button';
-logoutButton.style.cssText =
-  'display:block;margin:12px auto;padding:10px 20px;border-radius:10px;cursor:pointer;';
-logoutButton.addEventListener('click', logout);
-document.body.appendChild(logoutButton);
-
-  currentUserId = session.user.id;
-
-  const { data: result, error } = await supabaseClient
-    .from('family_data')
-    .select('data')
-    .eq('user_id', currentUserId)
-    .maybeSingle();
-
-  if (error) {
-    alert('Could not load your cloud data: ' + error.message);
-    return;
-  }
-
-  const cloud = result?.data || {};
-
-  events = Array.isArray(cloud.events) ? cloud.events : [];
-  children = Array.isArray(cloud.children) ? cloud.children : [];
-  milestones = Array.isArray(cloud.milestones) ? cloud.milestones : [];
-  meals = Array.isArray(cloud.meals) ? cloud.meals : [];
-  groceries = Array.isArray(cloud.groceries) ? cloud.groceries : [];
-  transactions = Array.isArray(cloud.transactions) ? cloud.transactions : [];
-  tasks = Array.isArray(cloud.tasks) ? cloud.tasks : [];
-  notes = typeof cloud.notes === 'string' ? cloud.notes : '';
-
-  const snapshot = {
-    events, children, milestones, meals,
-    groceries, transactions, tasks, notes
-  };
-
-  for (const [key, value] of Object.entries(snapshot)) {
-    localStorage.setItem('nn_' + key, JSON.stringify(value));
-  }
-
-  if (!result) await saveToCloud();
-
-  render();
-}
-
-
-
 
 const $=s=>document.querySelector(s);
 const load=(k,d=[])=>{try{return JSON.parse(localStorage.getItem('nn_'+k))??d}catch{return d}};
@@ -359,6 +266,87 @@ $('#transactionsList').innerHTML=transactions.length?transactions.map((t,i)=>`<d
 $('#tasksList').innerHTML=tasks.length?tasks.map((t,i)=>`<label class="item"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i},this.checked)"><span style="flex:1;${t.done?'text-decoration:line-through;color:#aaa':''}">${esc(t.task)}</span><button class="link" onclick="removeItem('tasks',${i})">×</button></label>`).join(''):empty('Add your first task.','☑️');
 $('#notes').value=notes;
 }
+
+async function checkLogin() {
+  const { data: { session } } =
+    await supabaseClient.auth.getSession();
+
+  authScreen.style.display = session ? 'none' : 'block';
+  document.querySelector('.app').style.display =
+    session ? 'block' : 'none';
+  document.querySelector('nav').style.display =
+    session ? 'flex' : 'none';
+
+  logoutButton.style.display = session ? 'block' : 'none';
+
+  if (!session) {
+    currentUserId = null;
+    return;
+  }
+
+  currentUserId = session.user.id;
+
+  const { data: result, error } = await supabaseClient
+    .from('family_data')
+    .select('data')
+    .eq('user_id', currentUserId)
+    .maybeSingle();
+
+  if (error) {
+    alert('Could not load your cloud data: ' + error.message);
+    return;
+  }
+
+  const cloud = result?.data || {};
+
+  events = Array.isArray(cloud.events) ? cloud.events : [];
+  children = Array.isArray(cloud.children) ? cloud.children : [];
+  milestones = Array.isArray(cloud.milestones) ? cloud.milestones : [];
+  meals = Array.isArray(cloud.meals) ? cloud.meals : [];
+  groceries = Array.isArray(cloud.groceries) ? cloud.groceries : [];
+  transactions = Array.isArray(cloud.transactions) ? cloud.transactions : [];
+  tasks = Array.isArray(cloud.tasks) ? cloud.tasks : [];
+  notes = typeof cloud.notes === 'string' ? cloud.notes : '';
+
+  const snapshot = {
+    events, children, milestones, meals,
+    groceries, transactions, tasks, notes
+  };
+
+  for (const [key, value] of Object.entries(snapshot)) {
+    localStorage.setItem('nn_' + key, JSON.stringify(value));
+  }
+
+  if (!result) await saveToCloud();
+
+  render();
+}
+
+async function logout() {
+  const { error } = await supabaseClient.auth.signOut();
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  currentUserId = null;
+
+  ['events','children','milestones','meals',
+   'groceries','transactions','tasks','notes']
+    .forEach(key => localStorage.removeItem('nn_' + key));
+
+  location.reload();
+}
+
+const logoutButton = document.createElement('button');
+logoutButton.textContent = 'Sign Out';
+logoutButton.type = 'button';
+logoutButton.style.cssText =
+  'display:none;margin:12px auto;padding:10px 20px;border-radius:10px;cursor:pointer;';
+logoutButton.addEventListener('click', logout);
+document.querySelector('.app').prepend(logoutButton);
+
 function removeItem(k,i){let a=({events,children,meals,groceries,transactions,tasks})[k];a.splice(i,1);save(k,a);({events,children,meals,groceries,transactions,tasks}[k]=a);render()}
 function toggleTask(i,v){tasks[i].done=v;save('tasks',tasks);render()}
 function toggleGrocery(i,v){groceries[i].done=v;save('groceries',groceries);render()}
