@@ -361,8 +361,7 @@ bind('#taskForm',d=>{tasks.push({...d,done:false});save('tasks',tasks)});
 function addStarter(kind){let sets={baby:['Prepare safe sleep space','Stock diapers and wipes','Organize feeding supplies','Wash baby clothes'],home:['Plan meals for the week','Check household supplies','Wash and fold laundry','Tidy one shared space'],school:['Check school calendar','Prepare backpacks','Plan lunches','Choose outfits']};tasks.push(...sets[kind].map(task=>({task,done:false})));save('tasks',tasks);render();show('checklists')}
 function saveNotes(){notes=$('#notes').value;save('notes',notes);$('#noteStatus').textContent='Saved';setTimeout(()=>$('#noteStatus').textContent='',1800)}
 if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
-supabaseClient.auth.onAuthStateChange(() => {
-  checkLogin();
+checkLogin();
 });
 </script>
 </body></html>
