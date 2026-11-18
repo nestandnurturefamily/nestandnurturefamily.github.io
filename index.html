@@ -176,12 +176,10 @@ authForm.addEventListener('submit', async (event) => {
       return;
     }
 
-    if (result.data.session) {
-      authMessage.textContent = 'Signed in successfully!';
-      authScreen.style.display = 'none';
-      document.querySelector('.app').style.display = 'block';
-      document.querySelector('nav').style.display = 'flex';
-    }
+   if (result.data.session) {
+  authMessage.textContent = 'Signed in successfully!';
+  await checkLogin();
+}
   } catch (error) {
     authMessage.textContent = error.message;
   } finally {
