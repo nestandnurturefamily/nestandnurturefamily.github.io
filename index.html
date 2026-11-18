@@ -40,7 +40,9 @@ footer{text-align:center;color:#a99c94;font-size:10px;padding:25px}
 </style>
 </head>
 <body>
-
+<button id="logoutButton" type="button" onclick="logout()" style="display:none;position:fixed;top:12px;right:12px;z-index:99999;padding:10px 20px;border-radius:10px;cursor:pointer;background:#526b59;color:white;border:0;">
+  Sign Out
+</button>
 <div id="authScreen" style="max-width:440px;margin:60px auto;padding:25px;background:#fff;border:1px solid #eee5df;border-radius:22px;box-shadow:0 8px 28px #5d45300d;font-family:Arial,sans-serif;color:#403832">
 
   <div style="text-align:center;font-size:38px">🌷</div>
@@ -142,7 +144,7 @@ let isSigningUp = false;
 const authScreen = document.getElementById('authScreen');
 const authForm = document.getElementById('authForm');
 const authMessage = document.getElementById('authMessage');
-
+const logoutButton = document.getElementById('logoutButton');
 document.getElementById('authToggle').addEventListener('click', () => {
   isSigningUp = !isSigningUp;
   document.getElementById('authTitle').textContent =
@@ -355,13 +357,7 @@ async function logout() {
   location.reload();
 }
 
-const logoutButton = document.createElement('button');
-logoutButton.textContent = 'Sign Out';
-logoutButton.type = 'button';
-logoutButton.style.cssText =
-  'display:none;position:fixed;top:12px;right:12px;z-index:99999;padding:10px 20px;border-radius:10px;cursor:pointer;background:#526b59;color:white;border:0;';
-logoutButton.addEventListener('click', logout);
-document.body.appendChild(logoutButton);
+
 
 function removeItem(k,i){let a=({events,children,meals,groceries,transactions,tasks})[k];a.splice(i,1);save(k,a);({events,children,meals,groceries,transactions,tasks}[k]=a);render()}
 function toggleTask(i,v){tasks[i].done=v;save('tasks',tasks);render()}
