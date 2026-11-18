@@ -281,7 +281,7 @@ authForm.addEventListener('submit', async (event) => {
 
   try {
     const result = isSigningUp
-      ? await supabaseClient.auth.signUp({   email,   password,   options: {     emailRedirectTo: 'https://savannahrigdon1000.github.io/nest-and-nurture-1/'   } })
+      ? await supabaseClient.auth.signUp({   email,   password,   options: {     emailRedirectTo: 'https://nestandnurturefamily.github.io/'   } })
       : await supabaseClient.auth.signInWithPassword({ email, password });
 
     if (result.error) throw result.error;
