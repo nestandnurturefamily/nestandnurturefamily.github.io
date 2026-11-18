@@ -155,6 +155,13 @@ footer{text-align:center;color:#a99c94;font-size:10px;padding:25px}
 <button onclick="show('meals')"><span class="emoji">🍓</span><b>Plan your meals</b><small>Keep dinner simple</small></button>
 <button onclick="show('budget')"><span class="emoji">🤍</span><b>Check your budget</b><small>Know what's coming</small></button>
 </div>
+<div class="section-head">
+  <h3>Coming up</h3>
+  <button class="link" onclick="show('calendar')">Open calendar →</button>
+</div>
+<div class="panel" id="upcomingEvents">
+  <div class="empty">Your upcoming events will appear here. 🗓️</div>
+</div>
 <div class="section-head"><h3>Your family snapshot</h3><button class="link" onclick="show('checklists')">View tasks →</button></div>
 <div class="cards">
 <div class="card"><h4>🗓️ Upcoming events</h4><div class="big-number" id="eventCount">0</div><div class="muted">Events saved in your calendar</div></div>
@@ -349,6 +356,26 @@ document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>
 function empty(msg,icon='🌿'){return `<div class="empty"><span>${icon}</span>${msg}</div>`}
 function render(){
 $('#eventCount').textContent=events.length;$('#taskCount').textContent=tasks.filter(t=>!t.done).length;$('#childCount').textContent=children.length;
+  const now = new Date();
+const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+  .toISOString().slice(0, 10);
+
+const upcoming = events
+  .filter(e => e.date && e.date >= today)
+  .sort((a, b) => a.date.localeCompare(b.date))
+  .slice(0, 5);
+
+$('#upcomingEvents').innerHTML = upcoming.length
+  ? upcoming.map(e => `
+      <div class="entry">
+        <div>
+          <strong>${esc(e.title)}</strong>
+          <small>${esc(e.date)} ${esc(e.time || '')}
+          ${e.person ? ' · ' + esc(e.person) : ''}</small>
+        </div>
+      </div>
+    `).join('')
+  : empty('Nothing scheduled yet. Enjoy the breathing room!','🌷');
 $('#eventsList').innerHTML=events.length?events.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')).map((e,i)=>`<div class="entry"><div><strong>${esc(e.title)}</strong><small>${esc(e.date)} ${esc(e.time||'')} ${e.person?'· '+esc(e.person):''}</small></div><button class="link" onclick="removeItem('events',${i})">Delete</button></div>`).join(''):empty('Your calendar is ready for its first event.','🗓️');
 $('#childrenList').innerHTML=children.length?children.map((c,i)=>`<div class="entry"><div><strong>${esc(c.name)}</strong><small>${esc(c.type)} ${c.birthday?'· Birthday: '+esc(c.birthday):''}</small></div><button class="link" onclick="removeItem('children',${i})">Delete</button></div>`).join(''):empty('Add your children to begin.','♡');
 $('#milestoneChild').innerHTML='<option value="">Choose a child</option>'+children.map(c=>`<option>${esc(c.name)}</option>`).join('');
