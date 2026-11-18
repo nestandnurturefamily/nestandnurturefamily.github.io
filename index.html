@@ -378,66 +378,61 @@ $('#today').textContent=new Date().toLocaleDateString(undefined,{month:'short',d
 function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===id));render();window.scrollTo({top:0,behavior:'smooth'})}
 document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>show(b.dataset.view)));
 function empty(msg,icon='🌿'){return `<div class="empty"><span>${icon}</span>${msg}</div>`}
+
 function render(){
-$('#eventCount').textContent = events.length;
-$('#taskCount').textContent = tasks.filter(t => !t.done).length;
-$('#childCount').textContent = children.length;
+  $('#eventCount').textContent = events.length;
+  $('#taskCount').textContent = tasks.filter(t => !t.done).length;
+  $('#childCount').textContent = children.length;
 
-$('#totalTasks').textContent = tasks.length;
-$('#completedTasks').textContent = tasks.filter(t => t.done).length;
-$('#remainingTasks').textContent = tasks.filter(t => !t.done).length;
+  $('#totalTasks').textContent = tasks.length;
+  $('#completedTasks').textContent = tasks.filter(t => t.done).length;
+  $('#remainingTasks').textContent = tasks.filter(t => !t.done).length;
 
-const now = new Date();
-const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-  .toISOString().slice(0, 10);
-const upcoming = events
-  .filter(e => e.date && e.date >= today)
-  .sort((a, b) => a.date.localeCompare(b.date))
-  .slice(0, 5);
-
-$('#upcomingEvents').innerHTML = upcoming.length
-  ? upcoming.map(e => `
-      <div class="entry">
-        <div>
-          <strong>${esc(e.title)}</strong>
-          <small>${esc(e.date)} ${esc(e.time || '')}
-          ${e.person ? ' · ' + esc(e.person) : ''}</small>
-        </div>
-      </div>
-    `).join('')
-  : empty('Nothing scheduled yet. Enjoy the breathing room!','🌷');$('#taskCount').textContent=tasks.filter(t=>!t.done).length;$('#childCount').textContent=children.length;
   const now = new Date();
-const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
-  .toISOString().slice(0, 10);
+  const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+    .toISOString().slice(0, 10);
 
-const upcoming = events
-  .filter(e => e.date && e.date >= today)
-  .sort((a, b) => a.date.localeCompare(b.date))
-  .slice(0, 5);
+  const upcoming = events
+    .filter(e => e.date && e.date >= today)
+    .sort((a, b) => a.date.localeCompare(b.date))
+    .slice(0, 5);
 
-$('#upcomingEvents').innerHTML = upcoming.length
-  ? upcoming.map(e => `
-      <div class="entry">
-        <div>
-          <strong>${esc(e.title)}</strong>
-          <small>${esc(e.date)} ${esc(e.time || '')}
-          ${e.person ? ' · ' + esc(e.person) : ''}</small>
+  $('#upcomingEvents').innerHTML = upcoming.length
+    ? upcoming.map(e => `
+        <div class="entry">
+          <div>
+            <strong>${esc(e.title)}</strong>
+            <small>${esc(e.date)} ${esc(e.time || '')}
+            ${e.person ? ' · ' + esc(e.person) : ''}</small>
+          </div>
         </div>
-      </div>
-    `).join('')
-  : empty('Nothing scheduled yet. Enjoy the breathing room!','🌷');
-$('#eventsList').innerHTML=events.length?events.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')).map((e,i)=>`<div class="entry"><div><strong>${esc(e.title)}</strong><small>${esc(e.date)} ${esc(e.time||'')} ${e.person?'· '+esc(e.person):''}</small></div><button class="link" onclick="removeItem('events',${i})">Delete</button></div>`).join(''):empty('Your calendar is ready for its first event.','🗓️');
-$('#childrenList').innerHTML=children.length?children.map((c,i)=>`<div class="entry"><div><strong>${esc(c.name)}</strong><small>${esc(c.type)} ${c.birthday?'· Birthday: '+esc(c.birthday):''}</small></div><button class="link" onclick="removeItem('children',${i})">Delete</button></div>`).join(''):empty('Add your children to begin.','♡');
-$('#milestoneChild').innerHTML='<option value="">Choose a child</option>'+children.map(c=>`<option>${esc(c.name)}</option>`).join('');
-$('#milestonesList').innerHTML=milestones.map(m=>`<div class="entry"><div><strong>${esc(m.title)}</strong><small>${esc(m.child)} · ${esc(m.date||'Date not set')} ${m.notes?'· '+esc(m.notes):''}</small></div></div>`).join('');
-$('#mealsList').innerHTML=meals.length?meals.map((m,i)=>`<div class="entry"><div><strong>${esc(m.day)} · ${esc(m.type)}</strong><small>${esc(m.meal)}</small></div><button class="link" onclick="removeItem('meals',${i})">Delete</button></div>`).join(''):empty('Your meal plan will show up here.','🍽️');
-$('#groceriesList').innerHTML=groceries.length?groceries.map((g,i)=>`<label class="item"><input type="checkbox" ${g.done?'checked':''} onchange="toggleGrocery(${i},this.checked)"><span style="${g.done?'text-decoration:line-through;color:#aaa':''}">${esc(g.item)}</span><button class="link" style="margin-left:auto" onclick="removeItem('groceries',${i})">×</button></label>`).join(''):empty('Add items as you think of them.','🛒');
-let inc=transactions.filter(t=>t.type==='income').reduce((s,t)=>s+Number(t.amount),0),exp=transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+Number(t.amount),0);
-$('#incomeTotal').textContent=money(inc);$('#expenseTotal').textContent=money(exp);$('#remainingTotal').textContent=money(inc-exp);
-$('#transactionsList').innerHTML=transactions.length?transactions.map((t,i)=>`<div class="entry"><div><strong>${esc(t.description)}</strong><small>${esc(t.date||'No date')} · ${t.type}</small></div><div class="amount" style="color:${t.type==='income'?'#66816d':'#9c6964'}">${t.type==='income'?'+':'−'}${money(t.amount)} <button class="link" onclick="removeItem('transactions',${i})">×</button></div></div>`).join(''):empty('Your transactions will appear here.','♡');
-$('#tasksList').innerHTML=tasks.length?tasks.map((t,i)=>`<label class="item"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i},this.checked)"><span style="flex:1;${t.done?'text-decoration:line-through;color:#aaa':''}">${esc(t.task)}</span><button class="link" onclick="removeItem('tasks',${i})">×</button></label>`).join(''):empty('Add your first task.','☑️');
-$('#notes').value=notes;
+      `).join('')
+    : empty('Nothing scheduled yet. Enjoy the breathing room!','🌷');
+
+  $('#eventsList').innerHTML=events.length?events.slice().sort((a,b)=>(a.date||'').localeCompare(b.date||'')).map((e,i)=>`<div class="entry"><div><strong>${esc(e.title)}</strong><small>${esc(e.date)} ${esc(e.time||'')} ${e.person?'· '+esc(e.person):''}</small></div><button class="link" onclick="removeItem('events',${i})">Delete</button></div>`).join(''):empty('Your calendar is ready for its first event.','🗓️');
+
+  $('#childrenList').innerHTML=children.length?children.map((c,i)=>`<div class="entry"><div><strong>${esc(c.name)}</strong><small>${esc(c.type)} ${c.birthday?'· Birthday: '+esc(c.birthday):''}</small></div><button class="link" onclick="removeItem('children',${i})">Delete</button></div>`).join(''):empty('Add your children to begin.','♡');
+
+  $('#milestoneChild').innerHTML='<option value="">Choose a child</option>'+children.map(c=>`<option>${esc(c.name)}</option>`).join('');
+  $('#milestonesList').innerHTML=milestones.map(m=>`<div class="entry"><div><strong>${esc(m.title)}</strong><small>${esc(m.child)} · ${esc(m.date||'Date not set')} ${m.notes?'· '+esc(m.notes):''}</small></div></div>`).join('');
+
+  $('#mealsList').innerHTML=meals.length?meals.map((m,i)=>`<div class="entry"><div><strong>${esc(m.day)} · ${esc(m.type)}</strong><small>${esc(m.meal)}</small></div><button class="link" onclick="removeItem('meals',${i})">Delete</button></div>`).join(''):empty('Your meal plan will show up here.','🍽️');
+
+  $('#groceriesList').innerHTML=groceries.length?groceries.map((g,i)=>`<label class="item"><input type="checkbox" ${g.done?'checked':''} onchange="toggleGrocery(${i},this.checked)"><span style="${g.done?'text-decoration:line-through;color:#aaa':''}">${esc(g.item)}</span><button class="link" style="margin-left:auto" onclick="removeItem('groceries',${i})">×</button></label>`).join(''):empty('Add items as you think of them.','🛒');
+
+  let inc=transactions.filter(t=>t.type==='income').reduce((s,t)=>s+Number(t.amount),0);
+  let exp=transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+Number(t.amount),0);
+  $('#incomeTotal').textContent=money(inc);
+  $('#expenseTotal').textContent=money(exp);
+  $('#remainingTotal').textContent=money(inc-exp);
+
+  $('#transactionsList').innerHTML=transactions.length?transactions.map((t,i)=>`<div class="entry"><div><strong>${esc(t.description)}</strong><small>${esc(t.date||'No date')} · ${t.type}</small></div><div class="amount" style="color:${t.type==='income'?'#66816d':'#9c6964'}">${t.type==='income'?'+':'−'}${money(t.amount)} <button class="link" onclick="removeItem('transactions',${i})">×</button></div></div>`).join(''):empty('Your transactions will appear here.','♡');
+
+  $('#tasksList').innerHTML=tasks.length?tasks.map((t,i)=>`<label class="item"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i},this.checked)"><span style="flex:1;${t.done?'text-decoration:line-through;color:#aaa':''}">${esc(t.task)}</span><button class="link" onclick="removeItem('tasks',${i})">×</button></label>`).join(''):empty('Add your first task.','☑️');
+
+  $('#notes').value=notes;
 }
+
 let loginCheckVersion = 0;
 async function checkLogin(sessionOverride = null) {
   const thisCheck = ++loginCheckVersion;
