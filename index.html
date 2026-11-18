@@ -178,8 +178,8 @@ authForm.addEventListener('submit', async (event) => {
 
 if (result.data.session) {
   authMessage.textContent = 'Signed in successfully!';
-  await checkLogin();
-  logoutButton.style.display = 'block';
+ await checkLogin(result.data.session);
+logoutButton.style.display = 'block';
 }
   } catch (error) {
     authMessage.textContent = error.message;
@@ -266,9 +266,11 @@ $('#tasksList').innerHTML=tasks.length?tasks.map((t,i)=>`<label class="item"><in
 $('#notes').value=notes;
 }
 
-async function checkLogin() {
-  const { data: { session } } =
+async function checkLogin(sessionOverride = null) {
+const { data: { session: savedSession } } =
     await supabaseClient.auth.getSession();
+
+const session = sessionOverride || savedSession;
 
   authScreen.style.display = session ? 'none' : 'block';
   document.querySelector('.app').style.display =
