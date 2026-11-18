@@ -204,19 +204,102 @@ document.getElementById('forgotPassword').addEventListener('click', async () => 
     : 'If an account exists, a password reset email will be sent.';
 });
 
+
 async function checkLogin() {
-  const { data: { session } } = await supabaseClient.auth.getSession();
+  const { data: { session } } =
+    await supabaseClient.auth.getSession();
 
   authScreen.style.display = session ? 'none' : 'block';
-  document.querySelector('.app').style.display = session ? 'block' : 'none';
-  document.querySelector('nav').style.display = session ? 'flex' : 'none';
+  document.querySelector('.app').style.display =
+    session ? 'block' : 'none';
+  document.querySelector('nav').style.display =
+    session ? 'flex' : 'none';
+
+  if (!session) {
+    currentUserId = null;
+    return;
+  }
+
+  currentUserId = session.user.id;
+
+  const { data: result, error } = await supabaseClient
+    .from('family_data')
+    .select('data')
+    .eq('user_id', currentUserId)
+    .maybeSingle();
+
+  if (error) {
+    alert('Could not load your cloud data: ' + error.message);
+    return;
+  }
+
+  const cloud = result?.data || {};
+
+  events = Array.isArray(cloud.events) ? cloud.events : [];
+  children = Array.isArray(cloud.children) ? cloud.children : [];
+  milestones = Array.isArray(cloud.milestones) ? cloud.milestones : [];
+  meals = Array.isArray(cloud.meals) ? cloud.meals : [];
+  groceries = Array.isArray(cloud.groceries) ? cloud.groceries : [];
+  transactions = Array.isArray(cloud.transactions) ? cloud.transactions : [];
+  tasks = Array.isArray(cloud.tasks) ? cloud.tasks : [];
+  notes = typeof cloud.notes === 'string' ? cloud.notes : '';
+
+  const snapshot = {
+    events, children, milestones, meals,
+    groceries, transactions, tasks, notes
+  };
+
+  for (const [key, value] of Object.entries(snapshot)) {
+    localStorage.setItem('nn_' + key, JSON.stringify(value));
+  }
+
+  if (!result) await saveToCloud();
+
+  render();
 }
 
-checkLogin();
+
+
 
 const $=s=>document.querySelector(s);
 const load=(k,d=[])=>{try{return JSON.parse(localStorage.getItem('nn_'+k))??d}catch{return d}};
-const save=(k,v)=>localStorage.setItem('nn_'+k,JSON.stringify(v));
+
+let currentUserId = null;
+let cloudSaveTimer = null;
+
+async function saveToCloud() {
+  if (!currentUserId) return;
+
+  const data = {
+    events, children, milestones, meals,
+    groceries, transactions, tasks, notes
+  };
+
+  const { error } = await supabaseClient
+    .from('family_data')
+    .upsert({
+      user_id: currentUserId,
+      data,
+      updated_at: new Date().toISOString()
+    });
+
+  if (error) {
+    console.error('Cloud save failed:', error.message);
+    alert('Cloud sync failed: ' + error.message);
+  }
+}
+
+function scheduleCloudSave() {
+  if (!currentUserId) return;
+  clearTimeout(cloudSaveTimer);
+  cloudSaveTimer = setTimeout(saveToCloud, 800);
+}
+
+const save = (k, v) => {
+  localStorage.setItem('nn_' + k, JSON.stringify(v));
+  scheduleCloudSave();
+};
+
 let events=load('events'),children=load('children'),milestones=load('milestones'),meals=load('meals'),groceries=load('groceries'),transactions=load('transactions'),tasks=load('tasks'),notes=load('notes','');
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(Number(n)||0);
@@ -253,6 +336,6 @@ bind('#taskForm',d=>{tasks.push({...d,done:false});save('tasks',tasks)});
 function addStarter(kind){let sets={baby:['Prepare safe sleep space','Stock diapers and wipes','Organize feeding supplies','Wash baby clothes'],home:['Plan meals for the week','Check household supplies','Wash and fold laundry','Tidy one shared space'],school:['Check school calendar','Prepare backpacks','Plan lunches','Choose outfits']};tasks.push(...sets[kind].map(task=>({task,done:false})));save('tasks',tasks);render();show('checklists')}
 function saveNotes(){notes=$('#notes').value;save('notes',notes);$('#noteStatus').textContent='Saved';setTimeout(()=>$('#noteStatus').textContent='',1800)}
 if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
-render();
+checkLogin();
 </script>
 </body></html>
