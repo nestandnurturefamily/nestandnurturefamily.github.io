@@ -40,6 +40,28 @@ footer{text-align:center;color:#a99c94;font-size:10px;padding:25px}
 </style>
 </head>
 <body>
+
+<div id="authScreen" style="max-width:440px;margin:60px auto;padding:25px;background:#fff;border:1px solid #eee5df;border-radius:22px;box-shadow:0 8px 28px #5d45300d;font-family:Arial,sans-serif;color:#403832">
+
+  <div style="text-align:center;font-size:38px">🌷</div>
+  <h1 style="text-align:center;font-family:Georgia,serif;font-weight:500">Nest & Nurture</h1>
+  <p style="text-align:center;color:#82766e">Your family, beautifully organized.</p>
+
+  <h2 id="authTitle" style="font-family:Georgia,serif;font-weight:500">Welcome back</h2>
+
+  <form id="authForm" style="display:grid;gap:12px">
+    <input id="authEmail" type="email" placeholder="Email address" required style="padding:13px;border:1px solid #eee5df;border-radius:12px">
+    <input id="authPassword" type="password" placeholder="Password (at least 8 characters)" minlength="8" required style="padding:13px;border:1px solid #eee5df;border-radius:12px">
+    <button id="authSubmit" type="submit" style="padding:13px;background:#b77d78;color:white;border:0;border-radius:12px;font-weight:bold">Sign In</button>
+  </form>
+
+  <button id="authToggle" type="button" style="margin-top:15px;width:100%;padding:10px;background:#f4e9e6;border:0;border-radius:12px;color:#805e59">Create an account instead</button>
+
+  <button id="forgotPassword" type="button" style="margin-top:12px;width:100%;background:none;border:0;color:#b77d78">Forgot password?</button>
+
+  <p id="authMessage" style="font-size:13px;text-align:center;color:#82766e"></p>
+</div>
+
 <div class="app">
 <header><div class="brand"><div class="logo">🌷</div><div><h1>Nest & Nurture</h1><div class="tag">YOUR FAMILY, BEAUTIFULLY ORGANIZED</div></div></div><div class="date-pill" id="today"></div></header>
 <main>
@@ -105,6 +127,93 @@ footer{text-align:center;color:#a99c94;font-size:10px;padding:25px}
 <button class="nav-btn" data-view="checklists"><span>☑</span>Lists</button>
 </div></nav>
 <script>
+
+const SUPABASE_URL = 'https://xqpdhnqswguxayxlxoke.supabase.co';
+
+const SUPABASE_KEY = 'sb_publishable_itGUGR_aLmz4mMnLjZVznw_0-DIR43v';
+
+const supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+let isSigningUp = false;
+
+const authScreen = document.getElementById('authScreen');
+const authForm = document.getElementById('authForm');
+const authMessage = document.getElementById('authMessage');
+
+document.getElementById('authToggle').addEventListener('click', () => {
+  isSigningUp = !isSigningUp;
+  document.getElementById('authTitle').textContent =
+    isSigningUp ? 'Create your account' : 'Welcome back';
+  document.getElementById('authSubmit').textContent =
+    isSigningUp ? 'Create Account' : 'Sign In';
+  document.getElementById('authToggle').textContent =
+    isSigningUp ? 'Already have an account? Sign in' : 'Create an account instead';
+  authMessage.textContent = '';
+});
+
+authForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+
+  const email = document.getElementById('authEmail').value.trim();
+  const password = document.getElementById('authPassword').value;
+
+  document.getElementById('authSubmit').disabled = true;
+  authMessage.textContent = 'Please wait...';
+
+  try {
+    const result = isSigningUp
+      ? await supabaseClient.auth.signUp({ email, password })
+      : await supabaseClient.auth.signInWithPassword({ email, password });
+
+    if (result.error) throw result.error;
+
+    if (isSigningUp && !result.data.session) {
+      authMessage.textContent =
+        'Check your email to confirm your account, then sign in.';
+      return;
+    }
+
+    if (result.data.session) {
+      authMessage.textContent = 'Signed in successfully!';
+      authScreen.style.display = 'none';
+      document.querySelector('.app').style.display = 'block';
+      document.querySelector('nav').style.display = 'flex';
+    }
+  } catch (error) {
+    authMessage.textContent = error.message;
+  } finally {
+    document.getElementById('authSubmit').disabled = false;
+  }
+});
+
+document.getElementById('forgotPassword').addEventListener('click', async () => {
+  const email = document.getElementById('authEmail').value.trim();
+
+  if (!email) {
+    authMessage.textContent = 'Enter your email address first.';
+    return;
+  }
+
+  const { error } = await supabaseClient.auth.resetPasswordForEmail(email);
+
+  authMessage.textContent = error
+    ? error.message
+    : 'If an account exists, a password reset email will be sent.';
+});
+
+async function checkLogin() {
+  const { data: { session } } = await supabaseClient.auth.getSession();
+
+  authScreen.style.display = session ? 'none' : 'block';
+  document.querySelector('.app').style.display = session ? 'block' : 'none';
+  document.querySelector('nav').style.display = session ? 'flex' : 'none';
+}
+
+checkLogin();
+
 const $=s=>document.querySelector(s);
 const load=(k,d=[])=>{try{return JSON.parse(localStorage.getItem('nn_'+k))??d}catch{return d}};
 const save=(k,v)=>localStorage.setItem('nn_'+k,JSON.stringify(v));
