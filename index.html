@@ -220,6 +220,43 @@ async function checkLogin() {
     return;
   }
 
+async function logout() {
+  const { error } = await supabaseClient.auth.signOut();
+
+  if (error) {
+    alert('Sign out failed: ' + error.message);
+    return;
+  }
+
+  currentUserId = null;
+
+  events = [];
+  children = [];
+  milestones = [];
+  meals = [];
+  groceries = [];
+  transactions = [];
+  tasks = [];
+  notes = '';
+
+  [
+    'events', 'children', 'milestones', 'meals',
+    'groceries', 'transactions', 'tasks', 'notes'
+  ].forEach(key => localStorage.removeItem('nn_' + key));
+
+  authScreen.style.display = 'block';
+  document.querySelector('.app').style.display = 'none';
+  document.querySelector('nav').style.display = 'none';
+}
+
+const logoutButton = document.createElement('button');
+logoutButton.textContent = 'Sign Out';
+logoutButton.type = 'button';
+logoutButton.style.cssText =
+  'display:block;margin:12px auto;padding:10px 20px;border-radius:10px;cursor:pointer;';
+logoutButton.addEventListener('click', logout);
+document.querySelector('.app').prepend(logoutButton);
+
   currentUserId = session.user.id;
 
   const { data: result, error } = await supabaseClient
