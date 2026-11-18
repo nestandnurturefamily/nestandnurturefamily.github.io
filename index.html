@@ -388,8 +388,8 @@ function render(){
   $('#completedTasks').textContent = tasks.filter(t => t.done).length;
   $('#remainingTasks').textContent = tasks.filter(t => !t.done).length;
 
-  const now = new Date();
-  const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
+ const nnCurrentDate = new Date();
+const today = new Date(nnCurrentDate.getTime() - nnCurrentDate.getTimezoneOffset() * 60000)
     .toISOString().slice(0, 10);
 
   const upcoming = events
