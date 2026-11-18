@@ -416,7 +416,7 @@ const today = new Date(nnCurrentDate.getTime() - nnCurrentDate.getTimezoneOffset
   $('#childrenList').innerHTML=children.length?children.map((c,i)=>`<div class="entry"><div><strong>${esc(c.name)}</strong><small>${esc(c.type)} ${c.birthday?'· Birthday: '+esc(c.birthday):''}</small></div><button class="link" onclick="removeItem('children',${i})">Delete</button></div>`).join(''):empty('Add your children to begin.','♡');
 
   $('#milestoneChild').innerHTML='<option value="">Choose a child</option>'+children.map(c=>`<option>${esc(c.name)}</option>`).join('');
-  $('#milestonesList').innerHTML=milestones.map(m=>`<div class="entry"><div><strong>${esc(m.title)}</strong><small>${esc(m.child)} · ${esc(m.date||'Date not set')} ${m.notes?'· '+esc(m.notes):''}</small></div></div>`).join('');
+  $('#milestonesList').innerHTML=milestones.length?milestones.map((m,i)=>`<div class="entry"><div><strong>${esc(m.title)}</strong><small>${esc(m.child)} · ${esc(m.date||'Date not set')} ${m.notes?'· '+esc(m.notes):''}</small></div><button class="link" onclick="removeMilestone(${i})">Delete</button></div>`).join(''):empty('Save your first milestone or memory.','♡');milestones.map(m=>`<div class="entry"><div><strong>${esc(m.title)}</strong><small>${esc(m.child)} · ${esc(m.date||'Date not set')} ${m.notes?'· '+esc(m.notes):''}</small></div></div>`).join('');
 
   $('#mealsList').innerHTML=meals.length?meals.map((m,i)=>`<div class="entry"><div><strong>${esc(m.day)} · ${esc(m.type)}</strong><small>${esc(m.meal)}</small></div><button class="link" onclick="removeItem('meals',${i})">Delete</button></div>`).join(''):empty('Your meal plan will show up here.','🍽️');
 
@@ -513,7 +513,11 @@ async function logout() {
 }
 
 
-
+function removeMilestone(i){
+  milestones.splice(i,1);
+  save('milestones',milestones);
+  render();
+}
 function removeItem(k,i){let a=({events,children,meals,groceries,transactions,tasks})[k];a.splice(i,1);save(k,a);({events,children,meals,groceries,transactions,tasks}[k]=a);render()}
 function toggleTask(i,v){tasks[i].done=v;save('tasks',tasks);render()}
 function toggleGrocery(i,v){groceries[i].done=v;save('groceries',groceries);render()}
