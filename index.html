@@ -341,9 +341,9 @@ const logoutButton = document.createElement('button');
 logoutButton.textContent = 'Sign Out';
 logoutButton.type = 'button';
 logoutButton.style.cssText =
-  'display:none;margin:12px auto;padding:10px 20px;border-radius:10px;cursor:pointer;';
+  'display:none;position:fixed;top:12px;right:12px;z-index:99999;padding:10px 20px;border-radius:10px;cursor:pointer;background:#526b59;color:white;border:0;';
 logoutButton.addEventListener('click', logout);
-document.querySelector('.app').prepend(logoutButton);
+document.body.appendChild(logoutButton);
 
 function removeItem(k,i){let a=({events,children,meals,groceries,transactions,tasks})[k];a.splice(i,1);save(k,a);({events,children,meals,groceries,transactions,tasks}[k]=a);render()}
 function toggleTask(i,v){tasks[i].done=v;save('tasks',tasks);render()}
