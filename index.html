@@ -270,12 +270,14 @@ $('#transactionsList').innerHTML=transactions.length?transactions.map((t,i)=>`<d
 $('#tasksList').innerHTML=tasks.length?tasks.map((t,i)=>`<label class="item"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i},this.checked)"><span style="flex:1;${t.done?'text-decoration:line-through;color:#aaa':''}">${esc(t.task)}</span><button class="link" onclick="removeItem('tasks',${i})">×</button></label>`).join(''):empty('Add your first task.','☑️');
 $('#notes').value=notes;
 }
-
+let loginCheckVersion = 0;
 async function checkLogin(sessionOverride = null) {
-const { data: { session: savedSession } } =
-    await supabaseClient.auth.getSession();
+  const thisCheck = ++loginCheckVersion;
 
-const session = sessionOverride || savedSession;
+  const session = sessionOverride ||
+    (await supabaseClient.auth.getSession()).data.session;
+
+  if (thisCheck !== loginCheckVersion) return;
 
   authScreen.style.display = session ? 'none' : 'block';
   document.querySelector('.app').style.display =
