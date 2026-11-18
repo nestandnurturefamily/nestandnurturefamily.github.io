@@ -364,6 +364,6 @@ function addStarter(kind){let sets={baby:['Prepare safe sleep space','Stock diap
 function saveNotes(){notes=$('#notes').value;save('notes',notes);$('#noteStatus').textContent='Saved';setTimeout(()=>$('#noteStatus').textContent='',1800)}
 if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
 checkLogin();
-});
+
 </script>
 </body></html>
