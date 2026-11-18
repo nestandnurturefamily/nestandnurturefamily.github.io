@@ -169,7 +169,24 @@ footer{text-align:center;color:#a99c94;font-size:10px;padding:25px}
 <div class="panel" id="upcomingEvents">
   <div class="empty">Your upcoming events will appear here. 🗓️</div>
 </div>
-<div class="section-head"><h3>Your family snapshot</h3><button class="link" onclick="show('checklists')">View tasks →</button></div>
+<div class="section-head"><h3> <div class="section-head">
+  <h3>Task overview</h3>
+  <button class="link" onclick="show('checklists')">View all tasks →</button>
+</div>
+<div class="cards">
+  <div class="card">
+    <h4>Total tasks</h4>
+    <div class="big-number" id="totalTasks">0</div>
+  </div>
+  <div class="card">
+    <h4>Completed</h4>
+    <div class="big-number" id="completedTasks">0</div>
+  </div>
+  <div class="card">
+    <h4>Still to do</h4>
+    <div class="big-number" id="remainingTasks">0</div>
+  </div>
+</div>Your family snapshot</h3><button class="link" onclick="show('checklists')">View tasks →</button></div>
 <div class="cards">
 <div class="card"><h4>🗓️ Upcoming events</h4><div class="big-number" id="eventCount">0</div><div class="muted">Events saved in your calendar</div></div>
 <div class="card"><h4>☑️ To-do list</h4><div class="big-number" id="taskCount">0</div><div class="muted">Tasks still to complete</div></div>
@@ -362,7 +379,9 @@ function show(id){document.querySelectorAll('.view').forEach(v=>v.classList.togg
 document.querySelectorAll('.nav-btn').forEach(b=>b.addEventListener('click',()=>show(b.dataset.view)));
 function empty(msg,icon='🌿'){return `<div class="empty"><span>${icon}</span>${msg}</div>`}
 function render(){
-$('#eventCount').textContent=events.length; const now = new Date();
+$('#eventCount').textContent=events.length; $('#totalTasks').textContent = tasks.length;
+$('#completedTasks').textContent = tasks.filter(t => t.done).length;
+$('#remainingTasks').textContent = tasks.filter(t => !t.done).length; const now = new Date();
 const today = new Date(now.getTime() - now.getTimezoneOffset() * 60000)
   .toISOString().slice(0, 10);
 
