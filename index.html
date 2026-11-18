@@ -182,9 +182,17 @@ if (result.data.session) {
   authScreen.style.display = 'none';
   document.querySelector('.app').style.display = 'block';
   document.querySelector('nav').style.display = 'flex';
-  logoutButton.style.display = 'block';
+logoutButton.style.display = 'block';
+logoutButton.style.visibility = 'visible';
+logoutButton.style.opacity = '1';
 
-  await checkLogin(result.data.session);
+setTimeout(() => {
+  logoutButton.style.display = 'block';
+}, 1000);
+
+await checkLogin(result.data.session);
+
+logoutButton.style.display = 'block';
 }
   } catch (error) {
     authMessage.textContent = error.message;
