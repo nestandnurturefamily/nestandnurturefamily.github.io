@@ -354,7 +354,24 @@ logoutButton.style.cssText =
   'display:none;position:fixed;top:12px;right:12px;z-index:99999;padding:10px 20px;border-radius:10px;cursor:pointer;background:#526b59;color:white;border:0;';
 logoutButton.addEventListener('click', logout);
 document.body.appendChild(logoutButton);
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' || event === 'INITIAL_SESSION') {
+    const loggedIn = !!session;
 
+    authScreen.style.display = loggedIn ? 'none' : 'block';
+    document.querySelector('.app').style.display =
+      loggedIn ? 'block' : 'none';
+    document.querySelector('nav').style.display =
+      loggedIn ? 'flex' : 'none';
+    logoutButton.style.display = loggedIn ? 'block' : 'none';
+  }
+
+  if (event === 'SIGNED_OUT') {
+    loginCheckVersion++;
+    currentUserId = null;
+    logoutButton.style.display = 'none';
+  }
+});
 function removeItem(k,i){let a=({events,children,meals,groceries,transactions,tasks})[k];a.splice(i,1);save(k,a);({events,children,meals,groceries,transactions,tasks}[k]=a);render()}
 function toggleTask(i,v){tasks[i].done=v;save('tasks',tasks);render()}
 function toggleGrocery(i,v){groceries[i].done=v;save('groceries',groceries);render()}
