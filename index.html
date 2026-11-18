@@ -210,6 +210,7 @@ async function checkLogin() {
     await supabaseClient.auth.getSession();
 
   authScreen.style.display = session ? 'none' : 'block';
+  logoutButton.style.display = session ? 'block' : 'none';
   document.querySelector('.app').style.display =
     session ? 'block' : 'none';
   document.querySelector('nav').style.display =
@@ -255,7 +256,7 @@ logoutButton.type = 'button';
 logoutButton.style.cssText =
   'display:block;margin:12px auto;padding:10px 20px;border-radius:10px;cursor:pointer;';
 logoutButton.addEventListener('click', logout);
-document.querySelector('.app').prepend(logoutButton);
+document.body.appendChild(logoutButton);
 
   currentUserId = session.user.id;
 
